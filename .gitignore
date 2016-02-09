@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+build/assets
+node_modules
+!.index.html
+!.gitignore
+!.gitkeep
