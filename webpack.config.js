@@ -11,8 +11,9 @@ const PATHS = {
 const config = {
   entry: PATHS.app + '/js/main.js',
   output: {
-    path: PATHS.build + '/assets/js',
+    path: PATHS.build + '/assets',
     filename: 'bundle.js',
+    publicPath: '/assets'
   },
   module: {
     loaders: [
