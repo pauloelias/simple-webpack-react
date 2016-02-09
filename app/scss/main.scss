@@ -1,3 +1,11 @@
+body:before {
+  content: "SCSS";
+  display: block;
+  padding: 1em;
+  font-size: 1em;
+  background: white;
+}
+
 body {
-  background: yellow;
+  background: grey;
 }

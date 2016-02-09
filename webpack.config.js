@@ -2,7 +2,10 @@ const webpack = require('webpack');
 const path = require('path');
 const merge = require('webpack-merge');
 
+const NpmInstallPlugin = require('npm-install-webpack-plugin');
 const TARGET = process.env.npm_lifecycle_event;
+process.env.BABEL_ENV = TARGET;
+
 const PATHS = {
   app: path.resolve(__dirname, 'app'),
   build: path.resolve(__dirname, 'build')
@@ -10,6 +13,9 @@ const PATHS = {
 
 const config = {
   entry: PATHS.app + '/js/main.js',
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   output: {
     path: PATHS.build + '/assets',
     filename: 'bundle.js',
@@ -17,14 +23,30 @@ const config = {
   },
   module: {
     loaders: [
+      // BABEL
       {
-        test: /\.jsx?/,
+        test: /\.jsx?$/,
         loader: 'babel',
+        query: {
+          cacheDirectory: true
+        },
         include: PATHS.app + '/js'
-      }, {
-        test: /\.css?/,
+      },
+      // CSS
+      {
+        test: /\.css$/,
         loaders: ['style', 'css'],
         include: PATHS.app + '/css'
+      },
+      // SCSS/SASS
+      {
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'sass']
+      },
+      // IMAGES
+      {
+        test: /\.(png|jpg|gif)$/,
+        loader: 'url?limit=8000'
       }
     ]
   }
@@ -40,12 +62,15 @@ if(TARGET === 'start' || !TARGET) {
       inline: true,
       progress: true,
       stats: 'errors-only',
-      devtool: 'eval-source-map',
+      devtool: 'eval-source-map', // 'cheap-module-eval-source-map'
       host: process.env.HOST,
       port: process.env.PORT || 3000
     },
     plugins: [
-      new webpack.HotModuleReplacementPlugin()
+      new webpack.HotModuleReplacementPlugin(),
+      new NpmInstallPlugin({
+        save: true // --save
+      })
     ]
   });
 }
