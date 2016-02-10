@@ -41,12 +41,20 @@ const config = {
       // SCSS/SASS
       {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
+        loaders: [
+          'style',
+          'css',
+          'autoprefixer?browsers=last 2 versions',
+          'sass?outputStyle=compressed'
+        ]
       },
       // IMAGES
       {
-        test: /\.(png|jpg|gif)$/,
-        loader: 'url?limit=8000'
+        test: /\.(png|jpe?g|gif|svg)$/,
+        loaders: [
+          'url?limit=8192',
+          'img'
+        ]
       }
     ]
   }
@@ -57,6 +65,7 @@ if(TARGET === 'start' || !TARGET) {
   module.exports = merge(config, {
     devServer: {
       contentBase: PATHS.build,
+      colors: true,
       historyApiFallback: true,
       hot: true,
       inline: true,

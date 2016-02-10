@@ -1,6 +1,10 @@
 import React from 'react';
 
 export default class Hero extends React.Component {
+  constructor() {
+    super();
+  }
+  
   render() {
     return (
       <div>

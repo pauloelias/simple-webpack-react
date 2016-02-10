@@ -1,6 +1,10 @@
 import React from 'react';
 
 export default class Footer extends React.Component {
+  constructor() {
+    super();
+  }
+  
   render() {
     const currentYear = new Date().getFullYear();
 
