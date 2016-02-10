@@ -1,8 +1,9 @@
-const webpack = require('webpack');
 const path = require('path');
+const webpack = require('webpack');
 const merge = require('webpack-merge');
-
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const NpmInstallPlugin = require('npm-install-webpack-plugin');
+
 const TARGET = process.env.npm_lifecycle_event;
 process.env.BABEL_ENV = TARGET;
 
@@ -14,7 +15,13 @@ const PATHS = {
 const config = {
   entry: PATHS.app + '/js/main.js',
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: [
+      '',
+      '.js',
+      '.jsx',
+      '.scss',
+      '.sass'
+    ]
   },
   output: {
     path: PATHS.build + '/assets',
@@ -32,15 +39,12 @@ const config = {
         },
         include: PATHS.app + '/js'
       },
-      // CSS
-      {
-        test: /\.css$/,
-        loaders: ['style', 'css'],
-        include: PATHS.app + '/css'
-      },
       // SCSS/SASS
       {
         test: /\.scss$/,
+        // loader: ExtractTextPlugin.extract(
+        //   'css!autoprefixer!sass'
+        // )
         loaders: [
           'style',
           'css',
@@ -78,12 +82,18 @@ if(TARGET === 'start' || !TARGET) {
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
       new NpmInstallPlugin({
-        save: true // --save
+        save: true
       })
     ]
   });
 }
 
 if(TARGET === 'build') {
-  module.exports = merge(config, {});
+  module.exports = merge(config, {
+    plugins: [
+      new ExtractTextPlugin('bundle[hash].css', {
+        allChunks: true
+      })
+    ]
+  });
 }
