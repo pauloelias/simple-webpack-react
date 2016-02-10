@@ -1,8 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-const NpmInstallPlugin = require('npm-install-webpack-plugin');
 
 const TARGET = process.env.npm_lifecycle_event;
 process.env.BABEL_ENV = TARGET;
@@ -26,7 +24,7 @@ const config = {
   output: {
     path: PATHS.build + '/assets',
     filename: 'bundle.js',
-    publicPath: '/assets'
+    publicPath: '/assets',
   },
   module: {
     loaders: [
@@ -42,9 +40,6 @@ const config = {
       // SCSS/SASS
       {
         test: /\.scss$/,
-        // loader: ExtractTextPlugin.extract(
-        //   'css!autoprefixer!sass'
-        // )
         loaders: [
           'style',
           'css',
@@ -81,19 +76,10 @@ if(TARGET === 'start' || !TARGET) {
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
-      new NpmInstallPlugin({
-        save: true
-      })
     ]
   });
 }
 
 if(TARGET === 'build') {
-  module.exports = merge(config, {
-    plugins: [
-      new ExtractTextPlugin('bundle[hash].css', {
-        allChunks: true
-      })
-    ]
-  });
+  module.exports = merge(config, {});
 }

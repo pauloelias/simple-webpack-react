@@ -1,10 +1,6 @@
 import React from 'react';
 
 export default class Hello extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const names = [
       'John',
@@ -21,7 +17,7 @@ export default class Hello extends React.Component {
         <p>This is a cool looking paragraph.</p>
         <ul>
           {
-            names.map(name => 
+            names.map(name =>
               <li className='names' key={names.length++}>{name}</li>
             )
           }
